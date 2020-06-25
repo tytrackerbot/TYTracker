@@ -76,13 +76,19 @@ def editThreshold(url, new_threshold):
 @eel.expose
 def uploadItems():
     global unix_upload_path
-    subprocess.call(['bash', unix_upload_path], shell=True)
+    if os.name == 'nt':
+        subprocess.call(['bash', unix_upload_path], shell=True)
+    else:
+        subprocess.call(['bash', unix_upload_path])
 
 
 @eel.expose
 def downloadItems():
     global unix_download_path
-    subprocess.call(['bash', unix_download_path], shell=True)
+    if os.name == 'nt':
+        subprocess.call(['bash', unix_download_path], shell=True)
+    else:
+        subprocess.call(['bash', unix_download_path])
 
 
 def getItemsObject():
@@ -109,7 +115,7 @@ def getItemFromURL(items, url):
 
 downloadItems()
 try:
-    eel.start('index.html', size=(1200, 700), position=(200, 50))
+    eel.start('index.html', size=(1200, 700), position=(200, 50), port=8080)
 except (SystemExit, MemoryError, KeyboardInterrupt):
     # We can do something here if needed
     # But if we don't catch these safely, the script will crash
